@@ -3,11 +3,13 @@
 import numpy as np
 import numpy.testing as npt
 import pytest
-
 from inflammation.models import daily_mean
 from inflammation.models import daily_max
 from inflammation.models import daily_min   
 from inflammation.models import daily_mean
+
+
+
 def test_daily_mean_zeros():
     """Test that mean function works for an array of zeros."""
     
@@ -74,4 +76,32 @@ def test_daily_max_string():
     with pytest.raises(TypeError):
         error_expected = daily_max(['hello', 'there', 'world'])
 
+@pytest.mark.parametrize(
+        
+    "test_input, test_result",
+    [
+        ([[1, 2], [3, 4], [5, 6]], [3, 4]), 
+        ([[0, 0], [0, 0], [0, 0]], [0, 0]), 
+    ]
+)
+def test_daily_mean(test_input, test_result):
+    """Test that mean function works both for zeros and integers."""
 
+    # Need to use Numpy testing functions to compare arrays
+    npt.assert_array_equal(daily_mean(test_input), test_result)
+
+
+
+# parametrize daily_max test
+@pytest.mark.parametrize(
+    "test_input, test_result",
+    [
+        ([[1, 2], [3, 4], [5, 6]], [5, 6]), 
+        ([[0, 0], [0, 0], [0, 0]], [0, 0]), 
+    ]
+)
+def test_daily_max(test_input, test_result):
+    """Test that max function works both for zeros and integers."""
+
+    # Need to use Numpy testing functions to compare arrays
+    npt.assert_array_equal(daily_max(test_input), test_result)
