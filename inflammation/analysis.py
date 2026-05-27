@@ -9,6 +9,23 @@ import argparse
 from inflammation import models, views
 
 
+def load_inflammation_data(data_dir):
+    """Load inflammation data from CSV files in a directory.
+
+    Args:
+        data_dir (str): Path to the directory containing the inflammation CSV files.
+
+    # Returns:
+    #     list: A list of loaded inflammation data.
+    # """
+    data_file_paths = glob.glob(os.path.join(data_dir, 'inflammation*.csv'))
+    if len(data_file_paths) == 0:
+        raise ValueError(f"No inflammation data CSV files found in path {data_dir}")
+    data = map(models.load_csv, data_file_paths)
+
+    return data
+
+
 def analyse_data(data_dir):
     """Calculates the standard deviation by day between datasets.
 
@@ -23,7 +40,7 @@ def analyse_data(data_dir):
     map is a built-in function that applies a given function to each item of an iterable 
     (like a list) and returns an iterator.
     '''
-    data = map(models.load_csv, data_file_paths)
+    data = load_inflammation_data(data_dir)
 
 
     means_by_day = map(models.daily_mean, data)
@@ -32,16 +49,16 @@ def analyse_data(data_dir):
     daily_standard_deviation = np.std(means_by_day_matrix, axis=0)  
 
 
-    print("Standard deviation by day:", daily_standard_deviation)
+    # print("Standard deviation by day:", daily_standard_deviation)
 
+    # return daily_standard_deviation
     return daily_standard_deviation
 
 
-
-    # graph_data = {
-    #     'standard deviation by day': daily_standard_deviation,
-    # }
-    # views.visualize(graph_data)
+    graph_data = {
+        'standard deviation by day': daily_standard_deviation,
+    }
+    views.visualize(graph_data)
 
 if __name__ == '__main__':
     # Initialize the parser
