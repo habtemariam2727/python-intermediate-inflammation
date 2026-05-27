@@ -9,6 +9,27 @@ and each column represents a single day across all patients.
 
 import numpy as np
 
+class Patient:
+    def __init__(self,name, weight=None, height=None):
+        self.name =name 
+        self.weight = weight
+        self.height = height
+
+    def get_body_mass_index(self, ):
+
+        '''
+        compute the body mass index (BMI) of a patient using the formula: 
+        BMI = weight (kg) / (height (m))^2
+        '''
+
+        return self.weight / (self.height ** 2)
+
+
+
+
+
+
+
 
 def load_csv(filename: str) -> np.ndarray:
     """Load a Numpy array from a CSV
