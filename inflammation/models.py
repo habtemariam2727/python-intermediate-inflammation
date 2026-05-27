@@ -7,6 +7,7 @@ inflammation data for a single patient taken over a number of days
 and each column represents a single day across all patients.
 """
 
+import json
 import numpy as np
 
 class Patient:
@@ -15,7 +16,7 @@ class Patient:
         self.weight = weight
         self.height = height
 
-    def get_body_mass_index(self, ):
+    def get_body_mass_index(self):
 
         '''
         compute the body mass index (BMI) of a patient using the formula: 
@@ -24,11 +25,23 @@ class Patient:
 
         return self.weight / (self.height ** 2)
 
-
-
-
-
-
+def load_json(filename):
+    """Load a numpy array from a JSON document.
+    
+    Expected format:
+    [
+      {
+        "observations": [0, 1]
+      },
+      {
+        "observations": [0, 2]
+      }    
+    ]
+    :param filename: Filename of CSV to load
+    """
+    with open(filename, 'r', encoding='utf-8') as file:
+        data_as_json = json.load(file)
+        return [np.array(entry['observations']) for entry in data_as_json]
 
 
 def load_csv(filename: str) -> np.ndarray:

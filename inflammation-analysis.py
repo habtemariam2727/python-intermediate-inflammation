@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Software for managing and analysing patients' inflammation data in our imaginary hospital."""
-
+import os
 import argparse
 
-from inflammation import models, views
+from inflammation import models, views, analysis
 
 
 def main(args):
@@ -27,6 +27,22 @@ def main(args):
         }
 
         views.visualize(view_data)
+
+    data_dir =os.path.dirname(in_files[0])
+    # construct an appropriate data source instance based on the file extension
+
+    if in_files[0].endswith('.csv'):    
+        data_source = analysis.CSVDataSource(data_dir)
+    elif in_files[0].endswith('.json'):
+        data_source = analysis.JSONDataSource(data_dir)
+    else:
+        raise ValueError(f"Unsupported file format for {in_files[0]}")
+
+    data = data_source.load_inflammation_data()
+    print("Loaded data:", data.head())
+
+
+
 
 
 if __name__ == "__main__":
